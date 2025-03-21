@@ -7,8 +7,8 @@ import time
 import json
 from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QPushButton, QTableWidget, QTableWidgetItem, QHeaderView, QMessageBox,
-    QLineEdit, QLabel, QTabWidget, QProgressBar, QHBoxLayout,
-    QCheckBox, QFileDialog, QSpinBox, QInputDialog
+    QLineEdit, QLabel, QTabWidget, QTreeWidget, QTreeWidgetItem, QComboBox, QFileDialog, QProgressBar, QHBoxLayout,
+    QCheckBox, QDialog, QTextEdit, QSpinBox
 )
 from PyQt6.QtCore import QTimer, Qt
 
@@ -52,6 +52,8 @@ class ProcessesTab(QWidget):
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.create_button("Refresh", self.list_processes))
         button_layout.addWidget(self.create_button("Kill Process", self.kill_selected_process))
+        button_layout.addWidget(self.create_button("Suspend", self.suspend_process))
+        button_layout.addWidget(self.create_button("Resume", self.resume_process))
         button_layout.addWidget(self.create_button("Set Priority", self.set_process_priority))
         button_layout.addWidget(self.create_button("Export", self.export_report))
         self.process_list_layout.addLayout(button_layout)

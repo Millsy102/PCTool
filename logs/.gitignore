@@ -1,0 +1,20 @@
+echo "# Byte-compiled / cached files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+env/
+
+# Logs and temporary files
+*.log
+*.bak
+
+# IDE-specific files
+.vscode/
+.idea/
+*.iml
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+" > .gitignore

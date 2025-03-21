@@ -11,24 +11,14 @@ default_theme = {
 }
 
 def load_theme():
-    """Loads the theme from a JSON file, or creates a default one if missing."""
     if not os.path.exists(theme_file):
         save_theme(default_theme)
-
-    try:
-        with open(theme_file, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except (json.JSONDecodeError, IOError) as e:
-        print(f"Error loading theme: {e}")
-        return default_theme  # Return default if there's an issue
+    with open(theme_file, "r") as f:
+        return json.load(f)
 
 def save_theme(theme):
-    """Saves the given theme dictionary to the JSON file."""
-    try:
-        with open(theme_file, "w", encoding="utf-8") as f:
-            json.dump(theme, f, indent=4)
-    except IOError as e:
-        print(f"Error saving theme: {e}")
+    with open(theme_file, "w") as f:
+        json.dump(theme, f, indent=4)
 
 if __name__ == "__main__":
     print("Current Theme:", load_theme())
