@@ -1,9 +1,12 @@
 import sys
+import os
 from PyQt6.QtWidgets import QApplication, QMainWindow, QTabWidget
 from PyQt6.QtGui import QIcon
 
-# Add the core directory to the system path
-sys.path.append(r'C:\Users\Robert\Desktop\Project\core')
+# Dynamically set the core directory path
+CORE_DIR = os.path.join(os.getcwd(), "core")
+if CORE_DIR not in sys.path:
+    sys.path.append(CORE_DIR)
 
 # Import your modules
 from gui.dashboard import DashboardTab
@@ -16,7 +19,13 @@ class MainUI(QMainWindow):
         super().__init__()
         self.setWindowTitle("Ultimate AI System")
         self.setGeometry(100, 100, 1200, 800)
-        self.setWindowIcon(QIcon("assets/icon.png"))
+
+        # Ensure the icon path is cross-platform compatible
+        ICON_PATH = os.path.join(os.getcwd(), "assets", "icon.png")
+        if os.path.exists(ICON_PATH):
+            self.setWindowIcon(QIcon(ICON_PATH))
+        else:
+            print(f"Warning: Icon file not found at {ICON_PATH}")
 
         self.tabs = QTabWidget()
         self.setCentralWidget(self.tabs)

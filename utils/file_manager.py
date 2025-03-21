@@ -6,7 +6,9 @@ def list_files(directory):
     return []
 
 def delete_file(filepath):
-    if os.path.exists(filepath):
+    try:
         os.remove(filepath)
-        return f"{filepath} deleted."
-    return "File not found."
+    except FileNotFoundError:
+        print(f"File not found: {filepath}")
+    except Exception as e:
+        print(f"Error deleting file: {e}")

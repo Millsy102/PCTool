@@ -4,9 +4,12 @@ import psutil
 from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, QHBoxLayout
 from PyQt6.QtCore import QTimer
 
-# Add the core directory to the system path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-from core.utils.logger import get_logger
+# Dynamically add the core directory to the system path
+CORE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "core"))
+if CORE_DIR not in sys.path:
+    sys.path.append(CORE_DIR)
+
+from utils.logger import get_logger  # Adjusted import path for logger
 
 class DashboardTab(QWidget):
     def __init__(self):
@@ -29,7 +32,7 @@ class DashboardTab(QWidget):
         self.ram_label = QLabel("RAM Usage: 0%")
         self.disk_label = QLabel("Disk Usage: 0%")
         self.network_label = QLabel("Network: 0KB/s")
-        
+
         self.stats_layout.addWidget(self.cpu_label)
         self.stats_layout.addWidget(self.ram_label)
         self.stats_layout.addWidget(self.disk_label)
@@ -54,18 +57,22 @@ class DashboardTab(QWidget):
     def refresh_data(self):
         """Method to refresh and update system stats."""
         self.logger.info("Refreshing dashboard data...")
-        
+
         # Update CPU, RAM, Disk, and Network stats
-        self.cpu_label.setText(f"CPU Usage: {psutil.cpu_percent()}%")
+        self.cpu_label.setText(f"CPU Usage: {psutil.cpu_percent(interval=1)}%")
         self.ram_label.setText(f"RAM Usage: {psutil.virtual_memory().percent}%")
-        self.disk_label.setText(f"Disk Usage: {psutil.disk_usage('/').percent}%")
-        
+        self.disk_label.setText(f"Disk Usage: {psutil.disk_usage(os.sep).percent}%")
+
         # Network stats (in KB/s)
-        net_io = psutil.net_io_counters()
-        bytes_received = net_io.bytes_recv
-        bytes_sent = net_io.bytes_sent
-        self.network_label.setText(f"Network: {((bytes_received + bytes_sent) / 1024):.2f}KB/s")
-        
+        try:
+            net_io = psutil.net_io_counters()
+            bytes_received = net_io.bytes_recv / 1024  # Convert to KB
+            bytes_sent = net_io.bytes_sent / 1024  # Convert to KB
+            self.network_label.setText(f"Network: {(bytes_received + bytes_sent):.2f} KB/s")
+        except Exception as e:
+            self.logger.error(f"Error retrieving network stats: {e}")
+            self.network_label.setText("Network: Error")
+
         print("Dashboard data refreshed")
 
 if __name__ == "__main__":
