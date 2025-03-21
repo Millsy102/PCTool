@@ -1,0 +1,9 @@
+{
+    "theme": "dark",
+    "log_level": "DEBUG",
+    "refresh_rate": 1,
+    "alerts": {
+        "cpu_threshold": 80,
+        "ram_threshold": 80
+    }
+}
